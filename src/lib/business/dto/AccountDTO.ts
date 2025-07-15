@@ -22,6 +22,15 @@ export default class AccountDTO implements Account {
     this.refreshTokenVersion = validated.refreshTokenVersion;
   }
 
+  public async createForInsertion() {
+    return new AccountDTO({
+      email: this.email,
+      password: await AuthClient.createHashedPassword(this.password),
+      role: this.role,
+      refreshTokenVersion: 0 
+    }).toSnakeCase();
+  }
+
   public equals(other: Account): boolean {
     return (
       this.email === other.email &&
@@ -42,12 +51,6 @@ export default class AccountDTO implements Account {
       role: this.role,
       refresh_token_version: this.refreshTokenVersion
     };
-  }
-
-  public async toInsertAccount() {
-    const object = this.toSnakeCase();
-    object.password = await AuthClient.createHashedPassword(this.password);
-    return object;
   }
 
   public async hasPasswordMatch(candidate: string): Promise<boolean> {

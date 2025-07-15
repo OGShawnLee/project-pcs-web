@@ -4,7 +4,7 @@ import { useAwait } from "$lib/Common";
 
 export default class AccountDAO {
   public static async createOne(account: AccountDTO) {
-    return DBClient.from("account").insert(await account.toInsertAccount());
+    return DBClient.from("account").insert(await account.createForInsertion());
   }
 
   public static getOne(email: string) {
