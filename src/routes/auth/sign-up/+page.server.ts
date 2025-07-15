@@ -47,7 +47,6 @@ export const actions = {
       );
 
       if (err) {
-        console.log(err);
         error(500, { message: err.message });
       }
 

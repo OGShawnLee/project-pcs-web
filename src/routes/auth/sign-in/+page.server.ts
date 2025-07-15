@@ -25,7 +25,6 @@ export const actions = {
       const { data: account, error: err } = await AccountDAO.findOneByEmail(form.data.email);
 
       if (err) {
-        console.log(err);
         error(500, { message: err.message });
       }
 

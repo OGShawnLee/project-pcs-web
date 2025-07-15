@@ -18,8 +18,6 @@ export const actions = {
     if (form.valid) {
       const { error: err } = await AcademicDAO.createOne(new AcademicDTO(form.data));
 
-      console.log(err);
-
       if (err) {
         if (err.message.startsWith("USER")) {
           const field = err.message.includes("Email") ? "email" : "workerID";
