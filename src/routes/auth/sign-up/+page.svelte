@@ -13,7 +13,7 @@
 	const { form: input, enhance } = form;
 </script>
 
-<GUIFormModal {enhance} title="Iniciar Sistema" subtitle="Bienvenido a ProTrack, creee su cuenta de Coordinador para comenzar.">
+<GUIFormModal {enhance} title="Iniciar Sistema" subtitle="Bienvenido a ProTrack, cree su cuenta de Coordinador para comenzar.">
 	{#snippet fields()}
 		<GUIInput
 			{form}
