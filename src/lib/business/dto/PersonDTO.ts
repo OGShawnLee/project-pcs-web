@@ -1,4 +1,5 @@
 import type { Person } from "@business/Schema";
+import Schema from "@business/Schema";
 
 export default abstract class PersonDTO implements Person {
   public readonly name: string;
@@ -8,13 +9,15 @@ export default abstract class PersonDTO implements Person {
 
   /**
    * Creates a new instance of PersonDTO.
-   * @param configuration - The configuration object containing person details.
+   * @param configuration - The configuration object containing configuration details.
+   * @throws {ValiError} If the provided configuration is invalid.
    */
   public constructor(configuration: Person) {
-    this.name = configuration.name;
-    this.lastName = configuration.lastName;
-    this.email = configuration.email;
-    this.phoneNumber = configuration.phoneNumber;
+    const validated = Schema.getValidPerson(configuration);
+    this.name = validated.name;
+    this.lastName = validated.lastName;
+    this.email = validated.email;
+    this.phoneNumber = validated.phoneNumber;
   }
 
   public equals(other: Person): boolean {
@@ -25,4 +28,6 @@ export default abstract class PersonDTO implements Person {
       this.phoneNumber === other.phoneNumber
     );
   }
+
+  public abstract toSnakeCase(): Record<string, string>;
 }

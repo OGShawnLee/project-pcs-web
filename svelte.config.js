@@ -13,7 +13,9 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter(),
 		alias: {
+			"@gui/*": "src/lib/gui/*",
 			"@business/*": "src/lib/business/*",
+			"@db/*": "src/lib/db/*",
 		}
 	}
 };
