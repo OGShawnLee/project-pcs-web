@@ -28,7 +28,7 @@
 			<div class="contents">
 				{@render fields()}
 			</div>
-			<div class="flex items-center gap-4">
+			<div class="grid sm:grid-cols-2 gap-4">
 				{@render button()}
 			</div>
 		</div>

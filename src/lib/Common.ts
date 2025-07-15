@@ -4,10 +4,21 @@ import { ValiError } from "valibot";
 export type Result<Data, Error> = { data: Data, error: null, status: "Success" } | { data: null, error: Error, status: "Failure" };
 
 export class UserDisplayableException extends Error {
-  public constructor(message: string) {
+  public readonly isDBCustom: boolean;
+  public constructor(message: string, isDBCustom = false) {
     super(message);
     this.name = "UserDisplayableException";
+    this.isDBCustom = isDBCustom;
   }
+}
+
+interface DBCustomError {
+  code: string,
+  message: string;
+}
+
+function isDBCustomError(error: unknown): error is DBCustomError {
+  return typeof error === "object" && error !== null && "code" in error && "message" in error;
 }
 
 export function isEmpty(value: string): boolean {
@@ -18,15 +29,15 @@ export function isNullish(value: unknown): value is null | undefined {
   return value === null || value === undefined;
 }
 
-export function useResult<Data>(data: Data | null, error: unknown) {
-  if (isNullish(data)) {
+export function createResult<Data>(data: Data | null, error: unknown) {
+  if (error) {
     return { data: null, error: handleError(error), status: "Failure" } as Result<Data, UserDisplayableException>;
   }
 
   return { data, error: null, status: "Success" } as Result<Data, UserDisplayableException>;
 }
 
-function handleError(error: unknown): UserDisplayableException {  
+function handleError(error: unknown): UserDisplayableException {
   // TODO: Replace with a proper logging mechanism
   console.error(error);
 
@@ -40,6 +51,10 @@ function handleError(error: unknown): UserDisplayableException {
 
   if (error instanceof ValiError) {
     return new UserDisplayableException("Los datos recibidos no son válidos, no es su culpa. Este error ha sido reportado al equipo de desarrollo.");
+  }
+
+  if (isDBCustomError(error)) {
+    return new UserDisplayableException(error.message, true);
   }
 
   return new UserDisplayableException("Ha ocurrido un error inesperado.");
@@ -63,7 +78,7 @@ export async function useAwait<Data>(fn: () => Promise<Data | Result<Data, UserD
   try {
     const data = await fn();
 
-  if (typeof data === "object" && data != null && "data" in data && "error" in data && "status" in data) {
+    if (typeof data === "object" && data != null && "data" in data && "error" in data && "status" in data) {
       return data;
     }
 

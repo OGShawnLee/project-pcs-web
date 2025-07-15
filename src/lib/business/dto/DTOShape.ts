@@ -1,0 +1,3 @@
+interface DTOShape {
+  serializable: object;
+}

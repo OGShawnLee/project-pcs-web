@@ -1,11 +1,13 @@
 import type { Person } from "@business/Schema";
 import Schema from "@business/Schema";
 
-export default abstract class PersonDTO implements Person {
+export default abstract class PersonDTO implements Person, DTOShape {
   public readonly name: string;
   public readonly lastName: string;
   public readonly email: string;
   public readonly phoneNumber: string;
+  public readonly createdAt: Date | null;
+  public readonly serializable: Person;
 
   /**
    * Creates a new instance of PersonDTO.
@@ -14,10 +16,12 @@ export default abstract class PersonDTO implements Person {
    */
   public constructor(configuration: Person) {
     const validated = Schema.getValidPerson(configuration);
+    this.serializable = validated;
     this.name = validated.name;
     this.lastName = validated.lastName;
     this.email = validated.email;
     this.phoneNumber = validated.phoneNumber;
+    this.createdAt = validated.createdAt ?? null;
   }
 
   public equals(other: Person): boolean {
@@ -29,5 +33,5 @@ export default abstract class PersonDTO implements Person {
     );
   }
 
-  public abstract toSnakeCase(): Record<string, string>;
+  public abstract toSnakeCase(): object;
 }

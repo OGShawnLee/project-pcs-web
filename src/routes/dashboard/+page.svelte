@@ -10,7 +10,8 @@
 
 <div class="min-h-screen flex flex-col items-center justify-center">
 	<main class="max-w-xl w-full mx-auto p-8 flex flex-col gap-8 border border-neutral-900">
-		<div>
+		<div class="flex items-center gap-4">
+			<a class="button button--main" href="/dashboard/review/academic"> Listado de Académico </a>
 			<a class="button button--main" href="/dashboard/register/academic"> Registrar Académico </a>
 		</div>
 		<div class="grid gap-4">

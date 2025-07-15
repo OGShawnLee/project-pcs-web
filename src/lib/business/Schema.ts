@@ -1,10 +1,12 @@
 import { useCatch } from "$lib/Common";
 import type { InferOutput } from "valibot";
 import {
+  date,
   email,
   integer,
   maxLength,
   minLength,
+  nullish,
   number,
   object,
   parse,
@@ -12,7 +14,9 @@ import {
   pipe,
   regex,
   string,
+  transform,
   trim,
+  union,
 } from "valibot";
 import { AcademicRole, AccountRole } from "@business/dto/enum";
 
@@ -94,6 +98,13 @@ export default class Schema {
         "Número de Teléfono debe ser una cadena de texto de 10 a 15 dígitos."
       )
     ),
+    createdAt: nullish(
+      pipe(
+        union([string(), date()], "Fecha de Creación debe ser una cadena de texto o una fecha."),
+        transform(value => typeof value === "string" ? new Date(value) : value),
+        date("Fecha de Creación debe ser una fecha válida."),
+      )
+    )
   });
   public static ACADEMIC_SCHEMA = object({
     ...this.PERSON_SCHEMA.entries,

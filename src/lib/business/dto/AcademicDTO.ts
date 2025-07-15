@@ -5,7 +5,8 @@ import PersonDTO from "@business/dto/PersonDTO";
 
 export default class AcademicDTO extends PersonDTO implements Academic {
   public readonly workerID: string;
-  public readonly role: AcademicRole
+  public readonly role: AcademicRole;
+  public readonly serializable: Academic; 
 
   /**
    * Creates a new instance of AcademicDTO.
@@ -15,6 +16,7 @@ export default class AcademicDTO extends PersonDTO implements Academic {
   public constructor(configuration: Academic) {
     const validated = Schema.getValidAcademic(configuration);
     super(validated);
+    this.serializable = validated;
     this.workerID = validated.workerID;
     this.role = validated.role;
   }
@@ -27,7 +29,7 @@ export default class AcademicDTO extends PersonDTO implements Academic {
     );
   }
 
-  public toSnakeCase(): Record<string, string> {
+  public toSnakeCase() {
     return {
       name: this.name,
       last_name: this.lastName,
@@ -35,6 +37,7 @@ export default class AcademicDTO extends PersonDTO implements Academic {
       phone_number: this.phoneNumber,
       worker_id: this.workerID,
       role: this.role,
+      created_at: this.createdAt
     };
   }
 }
