@@ -42,7 +42,27 @@ describe('Schema Test', () => {
 					password: VALID_ACCOUNT.password
 				})).toThrowError();
 			});
+		});
 
+		describe('getSafeValidAccount', () => {
+			it('Should return a Result with data for valid Account', () => {
+				const result = Schema.getSafeValidAccount(VALID_ACCOUNT);
+				assert(result.status === "Success");
+				expect(result.status).toBe("Success");
+				expect(result.data).toEqual(VALID_ACCOUNT);
+			});
+
+			it('Should return a Result with UserDisplayableError for invalid Account', () => {
+				const result = Schema.getSafeValidAccount({
+					email: "invalid-email",
+					password: "weakpass",
+					refreshTokenVersion: -1,
+					role: "INVALID_ROLE" as AccountRole // Invalid role
+				});
+				assert(result.status === "Failure");
+				expect(result.status).toBe("Failure");
+				expect(result.error).toBeInstanceOf(UserDisplayableException);
+			});
 		});
 	});
 
