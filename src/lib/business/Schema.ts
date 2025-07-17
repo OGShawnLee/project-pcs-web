@@ -23,6 +23,7 @@ import { AcademicRole, AccountRole } from "@business/dto/enum";
 export type Account = InferOutput<typeof Schema.ACCOUNT_SCHEMA>;
 export type Person = InferOutput<typeof Schema.PERSON_SCHEMA>;
 export type Academic = InferOutput<typeof Schema.ACADEMIC_SCHEMA>;
+export type Organization = InferOutput<typeof Schema.ORGANIZATION_SCHEMA>;
 export type CurrentUser = InferOutput<typeof Schema.CURRENT_USER_SCHEMA>;
 export type SignInShape = InferOutput<typeof Schema.SIGN_IN_SCHEMA>;
 export type SignUpShape = InferOutput<typeof Schema.SIGN_UP_SCHEMA>;
@@ -45,6 +46,13 @@ export default class Schema {
   );
   public static PHONE_NUMBER_REGEX = /^[0-9]{10,15}$/;
   public static WORKER_ID_REGEX = /(?!0+$)[0-9]{1,5}/;
+  public static CREATED_AT_SCHEMA = nullish(
+    pipe(
+      union([string(), date()], "Fecha de Creación debe ser una cadena de texto o una fecha."),
+      transform(value => typeof value === "string" ? new Date(value) : value),
+      date("Fecha de Creación debe ser una fecha válida."),
+    )
+  );
   public static ACCOUNT_SCHEMA = object({
     email: this.EMAIL_SCHEMA,
     name: this.NAME_SCHEMA,
@@ -101,13 +109,7 @@ export default class Schema {
         "Número de Teléfono debe ser una cadena de texto de 10 a 15 dígitos."
       )
     ),
-    createdAt: nullish(
-      pipe(
-        union([string(), date()], "Fecha de Creación debe ser una cadena de texto o una fecha."),
-        transform(value => typeof value === "string" ? new Date(value) : value),
-        date("Fecha de Creación debe ser una fecha válida."),
-      )
-    )
+    createdAt: this.CREATED_AT_SCHEMA
   });
   public static ACADEMIC_SCHEMA = object({
     ...this.PERSON_SCHEMA.entries,
@@ -122,6 +124,22 @@ export default class Schema {
       minLength(1, "ID de Trabajador debe tener al menos 1 caracteres."),
       maxLength(5, "ID de Trabajador no debe exceder 5 caracteres.")
     ),
+  });
+  public static ORGANIZATION_SCHEMA = object({
+    email: this.EMAIL_SCHEMA,
+    name: pipe(
+      string("Nombre de la Organización debe ser una cadena de texto."),
+      trim(),
+      minLength(3, "Nombre de la Organización debe tener al menos 3 caracteres."),
+      maxLength(64, "Nombre de la Organización no debe exceder 64 caracteres.")
+    ),
+    address: pipe(
+      string("Dirección de la Organización debe ser una cadena de texto."),
+      trim(),
+      minLength(3, "Dirección de la Organización debe tener al menos 3 caracteres."),
+      maxLength(128, "Dirección de la Organización no debe exceder 128 caracteres.")
+    ),
+    createdAt: this.CREATED_AT_SCHEMA
   });
 
   public static getValidAccount(data: unknown): Account {
@@ -154,5 +172,13 @@ export default class Schema {
 
   public static getSafeValidAcademic(data: unknown) {
     return useCatch(() => this.getValidAcademic(data));
+  }
+
+  public static getValidOrganization(data: unknown): Organization {
+    return parse(this.ORGANIZATION_SCHEMA, data);
+  }
+
+  public static getSafeValidOrganization(data: unknown) {
+    return useCatch(() => this.getValidOrganization(data));
   }
 }

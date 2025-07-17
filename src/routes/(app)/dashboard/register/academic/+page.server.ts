@@ -1,5 +1,5 @@
 import Schema from "@business/Schema";
-import { superValidate, setError, message } from "sveltekit-superforms/server";
+import { superValidate, setError } from "sveltekit-superforms/server";
 import { valibot } from "sveltekit-superforms/adapters";
 import { AcademicDTO } from "@business/dto";
 import { AcademicDAO } from "@db/dao";
@@ -19,7 +19,7 @@ export const actions = {
       const { error: err } = await AcademicDAO.createOne(new AcademicDTO(form.data));
 
       if (err) {
-        if (err.isDBCustom && err.message.includes("USER")) {
+        if (err.kind === "DATABASE" && err.message.includes("USER")) {
           const field = err.message.includes("Email") ? "email" : "workerID";
           const message = err.message.substring(err.message.indexOf(":") + 1).trim();
           return setError(form, field, message);

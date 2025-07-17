@@ -4,20 +4,21 @@ import { ValiError } from "valibot";
 export type Result<Data, Error> = { data: Data, error: null, status: "Success" } | { data: null, error: Error, status: "Failure" };
 
 export class UserDisplayableException extends Error {
-  public readonly isDBCustom: boolean;
-  public constructor(message: string, isDBCustom = false) {
+  public readonly kind: "UNKNOWN" | "VALIDATION" | "DATABASE" | "DATABASE-DUPLICATE" = "UNKNOWN";
+
+  public constructor(message: string, kind: "UNKNOWN" | "VALIDATION" | "DATABASE" | "DATABASE-DUPLICATE" = "UNKNOWN") {
     super(message);
     this.name = "UserDisplayableException";
-    this.isDBCustom = isDBCustom;
+    this.kind = kind;
   }
 }
 
-interface DBCustomError {
+interface DBError {
   code: string,
   message: string;
 }
 
-function isDBCustomError(error: unknown): error is DBCustomError {
+function isDBError(error: unknown): error is DBError {
   return typeof error === "object" && error !== null && "code" in error && "message" in error;
 }
 
@@ -43,15 +44,26 @@ function handleError(error: unknown): UserDisplayableException {
   }
 
   if (error instanceof PostgrestError) {
-    return new UserDisplayableException("Ha ocurrido un error en la base de datos, por favor, intente más tarde.");
+    return new UserDisplayableException("Ha ocurrido un error en la base de datos, por favor, intente más tarde.", "DATABASE");
   }
 
   if (error instanceof ValiError) {
-    return new UserDisplayableException("Los datos recibidos no son válidos, no es su culpa. Este error ha sido reportado al equipo de desarrollo.");
+    return new UserDisplayableException(
+      "Los datos recibidos no son válidos, no es su culpa. Este error ha sido reportado al equipo de desarrollo.",
+      "VALIDATION"
+    );
   }
 
-  if (isDBCustomError(error)) {
-    return new UserDisplayableException(error.message, true);
+  if (isDBError(error)) {
+    if (error.code == "23505") {
+      return new UserDisplayableException("Ya existe un registro con los mismos datos, por favor, intente con otros datos.", "DATABASE-DUPLICATE");
+    }
+
+    if (error.message.includes("USER")) {
+      return new UserDisplayableException(error.message, "DATABASE");
+    }
+
+    return new UserDisplayableException(error.message, "DATABASE");
   }
 
   return new UserDisplayableException("Ha ocurrido un error inesperado.");

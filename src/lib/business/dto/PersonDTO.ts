@@ -1,3 +1,4 @@
+import type DTOShape from "@business/dto/DTOShape";
 import type { Person } from "@business/Schema";
 import Schema from "@business/Schema";
 
