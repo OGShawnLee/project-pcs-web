@@ -26,9 +26,6 @@ importers:
       '@types/jsonwebtoken':
         specifier: ^9.0.10
         version: 9.0.10
-      '@unocss/reset':
-        specifier: ^66.3.3
-        version: 66.3.3
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
