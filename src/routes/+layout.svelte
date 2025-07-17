@@ -7,6 +7,6 @@
 
 <style>
   :global(body) {
-    --uno: "font-general bg-black text-neutral-300";
+    --uno: "font-archivo bg-black text-neutral-300";
   }
 </style>

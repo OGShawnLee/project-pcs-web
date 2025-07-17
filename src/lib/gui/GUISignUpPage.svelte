@@ -14,7 +14,11 @@
 	const { form: input, enhance } = form;
 </script>
 
-<GUIFormModal {enhance} title="Iniciar Sistema" subtitle="Bienvenido a ProTrack, cree su cuenta de Coordinador para comenzar.">
+<GUIFormModal
+	{enhance}
+	title="Iniciar Sistema"
+	subtitle="Bienvenido a ProTrack, cree su cuenta de Coordinador para comenzar."
+>
 	{#snippet fields()}
 		<GUIInput
 			{form}
@@ -26,14 +30,35 @@
 				<input class="input" type="email" {...props} required bind:value={$input.email} />
 			{/snippet}
 		</GUIInput>
+		<GUIInput
+			{form}
+			name="name"
+			label="Nombre Completo"
+			placeholder="Introduzca su Nombre Completo"
+		>
+			{#snippet field(props)}
+				<input class="input" type="text" {...props} required bind:value={$input.name} />
+			{/snippet}
+		</GUIInput>
 		<GUIInput {form} name="password" label="Contraseña" placeholder="Introduzca su Contraseña">
 			{#snippet field(props)}
 				<input class="input" type="password" {...props} required bind:value={$input.password} />
 			{/snippet}
 		</GUIInput>
-		<GUIInput {form} name="confirmPassword" label="Confirmar Contraseña" placeholder="Confirme su Contraseña">
+		<GUIInput
+			{form}
+			name="confirmPassword"
+			label="Confirmar Contraseña"
+			placeholder="Confirme su Contraseña"
+		>
 			{#snippet field(props)}
-				<input class="input" type="password" {...props} required bind:value={$input.confirmPassword} />
+				<input
+					class="input"
+					type="password"
+					{...props}
+					required
+					bind:value={$input.confirmPassword}
+				/>
 			{/snippet}
 		</GUIInput>
 	{/snippet}

@@ -37,10 +37,17 @@ export default class Schema {
   );
   // Strong Password = Characters, Numbers, 8-128 characters, One Uppercase and One Lowercase
   public static STRONG_PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$])[A-Za-z\d@$]{8,128}$/;
+  public static NAME_SCHEMA = pipe(
+    string("Nombre debe ser una cadena de texto."),
+    trim(),
+    minLength(3, "Nombre debe tener al menos 3 caracteres."),
+    maxLength(64, "Nombre no debe exceder 64 caracteres.")
+  );
   public static PHONE_NUMBER_REGEX = /^[0-9]{10,15}$/;
   public static WORKER_ID_REGEX = /(?!0+$)[0-9]{1,5}/;
   public static ACCOUNT_SCHEMA = object({
     email: this.EMAIL_SCHEMA,
+    name: this.NAME_SCHEMA,
     password: pipe(
       string("Contraseña debe ser una cadena de texto."),
       trim(),
@@ -68,6 +75,7 @@ export default class Schema {
   });
   public static SIGN_UP_SCHEMA = object({
     ...this.SIGN_IN_SCHEMA.entries,
+    name: this.NAME_SCHEMA,
     confirmPassword: pipe(
       string("Confirmación de Contraseña debe ser una cadena de texto."),
       trim(),
@@ -77,12 +85,7 @@ export default class Schema {
   });
   public static CURRENT_USER_SCHEMA = object({ id: this.EMAIL_SCHEMA });
   public static PERSON_SCHEMA = object({
-    name: pipe(
-      string("Nombre debe ser una cadena de texto."),
-      trim(),
-      minLength(3, "Nombre debe tener al menos 3 caracteres."),
-      maxLength(64, "Nombre no debe exceder 64 caracteres.")
-    ),
+    name: this.NAME_SCHEMA,
     lastName: pipe(
       string("Apellido debe ser una cadena de texto"),
       trim(),

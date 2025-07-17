@@ -38,9 +38,6 @@ export function createResult<Data>(data: Data | null, error: unknown) {
 }
 
 function handleError(error: unknown): UserDisplayableException {
-  // TODO: Replace with a proper logging mechanism
-  console.error(error);
-
   if (error instanceof UserDisplayableException) {
     return error;
   }

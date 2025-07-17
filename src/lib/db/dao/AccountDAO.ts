@@ -12,6 +12,7 @@ export default class AccountDAO {
     const { data, error } = await DBClient.from("account").select("*").filter("email", "eq", email).single();
     return createResult(
       data ? new AccountDTO({
+        name: data.name,
         email: data.email,
         password: data.password,
         role: data.role,
@@ -30,6 +31,7 @@ export default class AccountDAO {
     const { data, error } = await DBClient.from("account").select("*").filter("email", "eq", email).maybeSingle();
     return createResult(
       data ? new AccountDTO({
+        name: data.name,
         email: data.email,
         password: data.password,
         role: data.role,

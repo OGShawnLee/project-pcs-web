@@ -5,6 +5,7 @@ import AuthClient from "@business/auth/AuthClient";
 
 export default class AccountDTO implements Account {
   public readonly email: string;
+  public readonly name: string;
   public readonly password: string;
   public readonly role: AccountRole;
   public readonly refreshTokenVersion: number;
@@ -17,6 +18,7 @@ export default class AccountDTO implements Account {
   public constructor(configuration: Account) {
     const validated = Schema.getValidAccount(configuration);
     this.email = validated.email;
+    this.name = validated.name;
     this.password = validated.password;
     this.role = validated.role;
     this.refreshTokenVersion = validated.refreshTokenVersion;
@@ -25,6 +27,7 @@ export default class AccountDTO implements Account {
   public async createForInsertion() {
     return new AccountDTO({
       email: this.email,
+      name: this.name,
       password: await AuthClient.createHashedPassword(this.password),
       role: this.role,
       refreshTokenVersion: 0 
@@ -34,6 +37,7 @@ export default class AccountDTO implements Account {
   public equals(other: Account): boolean {
     return (
       this.email === other.email &&
+      this.name === other.name &&
       this.password === other.password &&
       this.role === other.role &&
       this.refreshTokenVersion === other.refreshTokenVersion
@@ -47,6 +51,7 @@ export default class AccountDTO implements Account {
   public toSnakeCase(this: AccountDTO) {
     return {
       email: this.email,
+      name: this.name,
       password: this.password,
       role: this.role,
       refresh_token_version: this.refreshTokenVersion

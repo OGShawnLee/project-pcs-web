@@ -40,6 +40,7 @@ export const actions = {
       const { error: err } = await AccountDAO.createOne(
         new AccountDTO({
           email: form.data.email,
+          name: form.data.name,
           password: form.data.password,
           role: AccountRole.COORDINATOR,
           refreshTokenVersion: 0
