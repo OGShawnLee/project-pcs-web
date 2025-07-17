@@ -1,5 +1,5 @@
 <script>
-	import GUIRegisterAcademicModal from "@gui/GUIRegisterAcademicModal.svelte";
+	import GUIRegisterAcademicModal from '@gui/GUIRegisterAcademicModal.svelte';
 
 	export let data;
 </script>

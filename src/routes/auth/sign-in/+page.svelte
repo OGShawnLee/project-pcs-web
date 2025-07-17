@@ -1,7 +1,7 @@
 <script>
-  import GUISignInPage from '@gui/GUISignInPage.svelte';
+	import GUISignInPage from '@gui/GUISignInPage.svelte';
 
-  export let data;
+	export let data;
 </script>
 
 <svelte:head>

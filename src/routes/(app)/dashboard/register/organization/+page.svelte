@@ -1,5 +1,5 @@
 <script>
-	import GUIRegisterOrganizationModal from "@gui/GUIRegisterOrganizationModal.svelte";
+	import GUIRegisterOrganizationModal from '@gui/GUIRegisterOrganizationModal.svelte';
 
 	export let data;
 </script>

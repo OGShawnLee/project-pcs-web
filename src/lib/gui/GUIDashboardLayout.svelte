@@ -17,7 +17,9 @@
 		<div class="flex flex-col items-start gap-4">
 			<a class="font-medium hover:text-white" href="/dashboard">Inicio</a>
 			<a class="font-medium hover:text-white" href="/dashboard/review/academic">Académicos</a>
-			<a class="font-medium hover:text-white" href="/dashboard/review/organization">Organizaciones</a>
+			<a class="font-medium hover:text-white" href="/dashboard/review/organization"
+				>Organizaciones</a
+			>
 		</div>
 		<section class="grid gap-4">
 			<h2 class="hidden">User Status</h2>

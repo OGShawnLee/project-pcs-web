@@ -5,8 +5,8 @@
 		enhance: (el: HTMLFormElement) => void;
 		fields: Snippet<[]>;
 		button: Snippet<[]>;
-    title: string;
-		subtitle?: string
+		title: string;
+		subtitle?: string;
 	}
 
 	const { enhance, fields, button, title, subtitle }: Properties = $props();
