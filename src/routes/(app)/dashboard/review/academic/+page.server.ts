@@ -8,5 +8,5 @@ export async function load() {
     error(500, { message: err.message });
   }
 
-  return { academicList: academicList }
+  return { academicList };
 }
