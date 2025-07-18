@@ -4,6 +4,6 @@
 	export let data;
 </script>
 
-<GUIDashboardLayout currentUser={data.currentUser}>
+<GUIDashboardLayout currentUser={data.currentUser} path={data.path}>
 	<slot />
 </GUIDashboardLayout>

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { SignOut } from 'phosphor-svelte';
+	import { fade } from 'svelte/transition';
 
 	export let currentUser: { name: string; email: string };
+	export let path: string;
 
 	function getNameInitials(name: string): string {
 		return name
@@ -44,9 +46,11 @@
 			</form>
 		</section>
 	</nav>
-	<main class="w-full flex flex-col xl:flex-[600px]">
-		<slot />
-	</main>
+	{#key path}
+		<main class="w-full flex flex-col xl:flex-[600px]" in:fade={{ duration: 300 }}>
+			<slot />
+		</main>
+	{/key}
 </div>
 
 <style>
