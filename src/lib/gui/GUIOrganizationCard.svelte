@@ -38,5 +38,10 @@
 				{formatter.format(date)}
 			</time>
 		{/if}
+		<div class="mt-4 flex items-center gap-4">
+			<a class="button button--main" href="/dashboard/register/representative/{organization.email}">
+				Añadir Representante
+			</a>
+		</div>
 	</div>
 </article>

@@ -80,7 +80,7 @@ function handleError(error: unknown): UserDisplayableException {
 		return new UserDisplayableException(error.message, 'DATABASE');
 	}
 
-	return new UserDisplayableException('Ha ocurrido un error inesperado.');
+	return new UserDisplayableException('Ha ocurrido un error inesperado.', 'UNKNOWN');
 }
 
 export function useCatch<Data>(

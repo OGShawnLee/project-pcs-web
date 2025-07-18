@@ -9,6 +9,24 @@ export default class OrganizationDAO {
 		return createResult(error ? null : data.email, error);
 	}
 
+	public static async findOne(email: string) {
+		const { data, error } = await DBClient.from('organization')
+			.select('*')
+			.eq('email', email)
+			.maybeSingle();
+		return createResult(
+			data
+				? new OrganizationDTO({
+						name: data.name,
+						email: data.email,
+						address: data.address,
+						createdAt: data.created_at
+					})
+				: null,
+			error
+		);
+	}
+
 	public static async getMany(limit = 12) {
 		const { data, error } = await DBClient.from('organization')
 			.select('*')

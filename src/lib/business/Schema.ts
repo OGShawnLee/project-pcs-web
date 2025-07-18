@@ -24,6 +24,7 @@ export type Account = InferOutput<typeof Schema.ACCOUNT_SCHEMA>;
 export type Person = InferOutput<typeof Schema.PERSON_SCHEMA>;
 export type Academic = InferOutput<typeof Schema.ACADEMIC_SCHEMA>;
 export type Organization = InferOutput<typeof Schema.ORGANIZATION_SCHEMA>;
+export type Representative = InferOutput<typeof Schema.REPRESENTATIVE_SCHEMA>;
 export type CurrentUser = InferOutput<typeof Schema.CURRENT_USER_SCHEMA>;
 export type SignInShape = InferOutput<typeof Schema.SIGN_IN_SCHEMA>;
 export type SignUpShape = InferOutput<typeof Schema.SIGN_UP_SCHEMA>;
@@ -142,6 +143,16 @@ export default class Schema {
 		),
 		createdAt: this.CREATED_AT_SCHEMA
 	});
+	public static REPRESENTATIVE_SCHEMA = object({
+		...this.PERSON_SCHEMA.entries,
+		position: pipe(
+			string('Cargo debe ser una cadena de texto.'),
+			trim(),
+			minLength(3, 'Cargo debe tener al menos 3 caracteres.'),
+			maxLength(64, 'Cargo no debe exceder 64 caracteres.')
+		),
+		emailOrganization: this.EMAIL_SCHEMA
+	});
 
 	public static getValidAccount(data: unknown): Account {
 		return parse(this.ACCOUNT_SCHEMA, data);
@@ -181,5 +192,13 @@ export default class Schema {
 
 	public static getSafeValidOrganization(data: unknown) {
 		return useCatch(() => this.getValidOrganization(data));
+	}
+
+	public static getValidRepresentative(data: unknown): Representative {
+		return parse(this.REPRESENTATIVE_SCHEMA, data);
+	}
+
+	public static getSafeValidRepresentative(data: unknown) {
+		return useCatch(() => this.getValidRepresentative(data));
 	}
 }
